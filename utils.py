@@ -58,3 +58,12 @@ def smiles_to_embedding(smiles: List[str], infer_model: InferenceModel) -> pd.Da
             columns=list(smiles.columns)+embeddings_colnames)
 
     return smiles
+
+
+def seq_to_emb(seq, model):
+    print(seq)
+    return model.seq_to_emb(model, seq=seq)
+
+
+def emb_to_seq(emb, model):
+    return model.emb_to_seq(model, embedding=emb)

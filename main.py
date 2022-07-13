@@ -1,8 +1,8 @@
 import numpy as np
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from pydantic import BaseModel
 from typing import List
-from utils import get_model, smiles_to_embedding
+from utils import get_model, smiles_to_embedding, seq_to_emb, emb_to_seq
 
 
 app = FastAPI(title="Predicting Continuous and Data-Driven" \
@@ -13,6 +13,8 @@ class SMILE(BaseModel):
     """Represent input as a list of batches containing smiles"""
     batches: list
 
+class CDDD(BaseModel):
+    cddd: list
 
 @app.on_event("startup")
 def load_model():
@@ -38,3 +40,23 @@ def predict(smile: SMILE):
     preds = preds.to_json()  # serialize pandas DF to send over REST
 
     return {"Prediction": preds}
+
+
+@app.post("/smiles_to_cddd")
+def seq2emb(smiles: SMILE):
+    print(smiles)
+    preds = seq_to_emb(smiles, model)
+    preds = preds.to_json()  # serialize pandas DF to send over REST
+
+    return {"1": preds}
+
+
+@app.post("/cddd_to_smiles")
+def emb2seq(cddd: CDDD):
+    """Given a list containing """
+    print(cddd)
+    smiles = emb_to_seq(cddd.cddd, model)
+    print(smiles)
+    smiles = smiles.to_json()  # serialize pandas DF to send over REST
+
+    return {smiles}
