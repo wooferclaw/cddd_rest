@@ -1,6 +1,5 @@
 import os
 import pandas as pd
-import tensorflow as tf
 import numpy as np
 
 from typing import List
@@ -62,8 +61,8 @@ def smiles_to_embedding(smiles: List[str], infer_model: InferenceModel) -> pd.Da
 
 def seq_to_emb(seq, model):
     print(seq)
-    return model.seq_to_emb(model, seq=seq)
+    return model.seq_to_emb(seq=seq)
 
 
 def emb_to_seq(emb, model):
-    return model.emb_to_seq(model, embedding=emb)
+    return model.emb_to_seq(embedding=np.array(emb))

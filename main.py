@@ -1,7 +1,5 @@
-import numpy as np
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from pydantic import BaseModel
-from typing import List
 from utils import get_model, smiles_to_embedding, seq_to_emb, emb_to_seq
 
 
@@ -13,8 +11,10 @@ class SMILE(BaseModel):
     """Represent input as a list of batches containing smiles"""
     batches: list
 
+
 class CDDD(BaseModel):
     cddd: list
+
 
 @app.on_event("startup")
 def load_model():
@@ -57,6 +57,5 @@ def emb2seq(cddd: CDDD):
     print(cddd)
     smiles = emb_to_seq(cddd.cddd, model)
     print(smiles)
-    smiles = smiles.to_json()  # serialize pandas DF to send over REST
 
-    return {smiles}
+    return smiles
